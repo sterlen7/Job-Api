@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerVal } = require('../middleware/registerValidation');
-const { userRegister, userLogin, userProfile} = require('../controller/userController');
+const { userRegister, userLogin, userProfile, createUserProfile, updateUserProfile} = require('../controller/userController');
 const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
@@ -12,10 +12,10 @@ userRouter.post('/user/register',registerVal,userRegister)
 userRouter.post('/user/login',userLogin)
 
 //User profile
+userRouter.post('/user/profile',userAuth,validateUserProfile,createUserProfile)
 
-// userRouter.post('/user/profile',userAuth,validateUserProfile,userProfile)
+userRouter.put('/user/profile', userAuth, updateUserProfile);
 
-// userRouter.put('/user/profile',userAuth,validateUserProfile,userProfile)
 
 
 module.exports = userRouter;

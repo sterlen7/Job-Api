@@ -2,6 +2,8 @@ const User = require('../models/userModel')
 const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
+const mongoose= require('mongoose')
+
 
 
 
@@ -78,3 +80,67 @@ exports.userLogin= async(req,res)=>{
         res.status(501).json({msg:`server error`})
     }
 }
+
+
+
+exports.createUserProfile = async (req, res) => {
+    const userId = req.user.id;
+    const { name, email, bio, workExperience, education, skills } = req.body;
+
+    try {
+        let profile = await UserProfile.findOne({ userId });
+
+        if (profile) {
+            return res.status(400).json({ msg: 'Profile already exists' });
+        }
+
+        profile = new UserProfile({
+            userId,
+            name,
+            email,
+            bio,
+            workExperience,
+            education,
+            skills
+        });
+
+        await profile.save();
+
+        return res.status(201).json({ msg: "User profile created successfully", profile });
+    } catch (err) {
+        console.error('Error creating user profile:', err.message);
+        res.status(500).json({ msg: 'Server error', error: err.message });
+    }
+};
+
+exports.updateUserProfile = async (req, res) => {
+    const userId = req.user.userId;
+    const { name, email, bio, workExperience, education, skills } = req.body;
+
+    try {
+        let profile = await UserProfile.findOne({ userId });
+
+
+        if (!profile) {
+            return res.status(404).json({ msg: 'Profile not found' });
+        }
+
+        // Update profile fields if provided
+        if (name) profile.name = name;
+        if (email) profile.email = email;
+        if (bio) profile.bio = bio;
+        if (workExperience) profile.workExperience = workExperience;
+        if (education) profile.education = education;
+        if (skills) profile.skills = skills;
+
+        await profile.save();
+
+        return res.status(200).json({ msg: "User profile updated successfully", profile });
+
+    } catch (err) {
+        console.error('Error updating user profile:', err.message);
+        res.status(500).json({ msg: 'Server error', error: err.message });
+    }
+}
+
+

@@ -14,9 +14,8 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(express.json());
 
-
-app.use('/', userRouter)
-app.use('/',adminRouter)
+app.use('/api', userRouter)
+app.use('/api',adminRouter)
 
 app.get('/', (req, res, next) => {
     res.json('Server is running');
