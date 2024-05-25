@@ -6,7 +6,7 @@ const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
 
 //User registration
-userRouter.post('/register',registerVal,userRegister)
+userRouter.post('/user/register',registerVal,userRegister)
 
 //User Login
 userRouter.post('/user/login',userLogin)

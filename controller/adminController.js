@@ -2,38 +2,37 @@ const Admin =require('../models/adminModel')
 const bcrypt = require('bcrypt')
 const Jwt = require('jsonwebtoken')
 
+exports.adminRegister = async (req, res) => {
+    const { username, email, password } = req.body;
 
-exports.adminRegister=async(req,res)=>{
-    const{username,email,password} = req.body;
+    try {
+        const usernameExists = await Admin.findOne({ username });
+        const emailExists = await Admin.findOne({ email });
 
-    try{
-        const usernameExists = await User.findOne({username})
-        const emailExists = await User.findOne({email})
-    
         if (usernameExists) {
             return res.status(400).json({ msg: 'Username already exists' });
         }
-    
-        if(emailExists){
-            return res.status(400).json({msg:"Email already exists"})
+
+        if (emailExists) {
+            return res.status(400).json({ msg: 'Email already exists' });
         }
 
-        const secretPassword= await bcrypt.hash(password,10)
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newAdmin= new Admin({
-            username:username,
-            email:email,
-            password:secretPassword
-        })
+        const newAdmin = new Admin({
+            username,
+            email,
+            password: hashedPassword
+        });
 
-        const adminCreated = await newAdmin.save()
+        const adminCreated = await newAdmin.save();
 
-        res.status(201).json(adminCreated)
-    }catch(err){
-        console.err()
-        res.status(500).json({msg:'Server Error'})
+        res.status(201).json({ adminCreated });
+    } catch (error) {
+        console.error('Error registering admin:', error.message);
+        res.status(500).json({ msg: 'Server Error', error: error.message });
     }
-}
+};
 
 
 exports.adminLogin = async (req, res) => {
@@ -46,16 +45,6 @@ exports.adminLogin = async (req, res) => {
         if (!password) {
             return res.status(400).json({ msg: 'Please enter password' });
         }
-         const usernameExists = await User.findOne({username})
-    const emailExists = await User.findOne({email})
-
-    if (usernameExists) {
-        return res.status(400).json({ msg: 'Username already exists' });
-    }
-
-    if(emailExists){
-        return res.status(400).json({msg:"Email already exists"})
-    }
 
         const admin = await Admin.findOne({ $or: [{ username }, { email }] });
 
