@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
+const Job = require('../models/jobModel')
 
 
 exports.userRegister= async (req,res)=>{
@@ -157,6 +158,44 @@ exports.updateUserProfile = async (req, res) => {
         console.error('Error updating user profile:', err.message);
         res.status(500).json({ msg: 'Server error', error: err.message });
     }
+}
+
+exports.getAllJobs = async(req,res)=>{
+    try {
+       
+        const jobs = await Job.find();
+
+        res.status(200).json(jobs);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+
+}
+
+
+exports.searchJobByTitle =async(req,res)=>{
+    try {
+        const { title } = req.body;
+
+        if (!title) {
+            return res.status(400).json({ message: 'Provide job title' });
+        }
+
+        
+        const jobs = await Job.find({ title: { $regex: new RegExp(title, 'i') } });
+
+        
+        if (jobs.length === 0) {
+            return res.status(404).json({ message: 'No jobs found with the specified title' });
+        }
+
+        res.status(200).json(jobs);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+
 }
 
 

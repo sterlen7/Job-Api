@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerVal } = require('../middleware/registerValidation');
-const { userRegister, userLogin, userProfile, createUserProfile, updateUserProfile, deleteUserAccount} = require('../controller/userController');
+const { userRegister, userLogin, userProfile, createUserProfile, updateUserProfile, deleteUserAccount, getAllJobs, searchJobByTitle} = require('../controller/userController');
 const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
@@ -20,6 +20,9 @@ userRouter.put('/user/profile', userAuth, updateUserProfile);
 
 userRouter.delete('/user/delete',userAuth,deleteUserAccount)
 
+//jobs
+userRouter.get('/jobs',getAllJobs)
+userRouter.get('/jobs/search',searchJobByTitle)
 
 
 
