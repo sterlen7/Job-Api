@@ -2,9 +2,6 @@ const User = require('../models/userModel')
 const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
-const mongoose= require('mongoose')
-
-
 
 
 exports.userRegister= async (req,res)=>{
@@ -81,6 +78,25 @@ exports.userLogin= async(req,res)=>{
     }
 }
 
+exports.deleteUserAccount = async(req,res)=>{
+    const userId = req.user.id
+
+    try{
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).json({ msg: 'User deleted successfully' });
+
+    }catch(error){
+        console.error(error)
+        res.status(501).json(message.error)
+    }
+}
 
 
 exports.createUserProfile = async (req, res) => {
