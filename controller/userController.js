@@ -3,14 +3,15 @@ const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
 const Job = require('../models/jobModel')
-const nodemailer =require('nodemailer')
+
 
 
 exports.userRegister= async (req,res)=>{
     const {email,password,username}=req.body
 
    try{
-    const secretPassword = await bcrypt.hash(password, 10)
+   
+    const secretPassword = await bcrypt.hash(password,10)
 
     const usernameExists = await User.findOne({username})
     const emailExists = await User.findOne({email})
@@ -60,10 +61,13 @@ exports.userLogin= async(req,res)=>{
             return res.status(404).json({msg:"User does not exist , Sign Up!"})
         }
 
+        console.log('Input Password:', password);
+        console.log('Stored Password:', user.password);
+
         const isPassword= await bcrypt.compare(password, user.password)
         
         if(!isPassword){
-            res.status(403).json({msg:"Wrong password"})
+           return res.status(403).json({msg:"Wrong password"})
         }
 
         if(user.banned){
@@ -72,11 +76,11 @@ exports.userLogin= async(req,res)=>{
 
         const token =Jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:'5000s'})
 
-        res.json({msg:"Login Successful",token})
+         res.json({msg:"Login Successful",token})
 
     }catch(err){
         console.error(err)
-        res.status(501).json({msg:`server error`})
+        return res.status(501).json({msg:`server error`})
     }
 }
 
@@ -201,14 +205,15 @@ exports.searchJobByTitle =async(req,res)=>{
 
 
 exports.forgotPassword = async(req,res) => {
+    const { email, otpCode, newPassword } = req.body;
     try {
-        const { email, otpCode, newPassword } = req.body;
+        
 
         if (!email || !otpCode || !newPassword) {
             return res.status(400).json({ message: 'Email, OTP code, and new password are required' });
         }
 
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -216,8 +221,9 @@ exports.forgotPassword = async(req,res) => {
         if (user.otpCode !== otpCode || user.otpCodeExpires < Date.now()) {
             return res.status(400).json({ message: 'Invalid or expired OTP code' });
         }
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-       if(password) user.password = newPassword; 
+        user.password = hashedPassword; 
         user.otpCode = undefined; 
         user.otpCodeExpires = undefined; 
         await user.save();

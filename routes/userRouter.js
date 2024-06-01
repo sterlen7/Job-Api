@@ -27,9 +27,10 @@ userRouter.get('/jobs/search',searchJobByTitle)
 
 
 //Password change
- userRouter.post('/forgot-password',userAuth,otp,forgotPassword)
+ userRouter.post('/forgot-password',userAuth,forgotPassword)
 
- userRouter.post('/otp-request', otp)
+//otp code 
+ userRouter.post('/otp-request',otp)
 
 
 
