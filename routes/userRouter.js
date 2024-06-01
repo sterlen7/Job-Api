@@ -1,9 +1,10 @@
 const express = require('express');
 const { registerVal } = require('../middleware/registerValidation');
-const { userRegister, userLogin, userProfile, createUserProfile, updateUserProfile, deleteUserAccount, getAllJobs, searchJobByTitle} = require('../controller/userController');
+const { userRegister, userLogin,createUserProfile, updateUserProfile, deleteUserAccount, getAllJobs, searchJobByTitle, changePassword, forgotPassword} = require('../controller/userController');
 const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
+const { otp } = require('../middleware/sendCode');
 
 //User registration
 userRouter.post('/user/register',registerVal,userRegister)
@@ -23,6 +24,12 @@ userRouter.delete('/user/delete',userAuth,deleteUserAccount)
 //jobs
 userRouter.get('/jobs',getAllJobs)
 userRouter.get('/jobs/search',searchJobByTitle)
+
+
+//Password change
+ userRouter.post('/forgot-password',userAuth,otp,forgotPassword)
+
+ userRouter.post('/otp-request', otp)
 
 
 

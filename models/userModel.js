@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema({
     email:{type:String,require:true,unique:true},
     password:{type:String, require:true},
     isAdmin:{type:Boolean,default:false},
-    banned:{type:Boolean,default:false}
+    banned:{type:Boolean,default:false},
+    otpCode: { type: String },
+    otpCodeExpires: { type: Date }
 },
 {
     timestamps: true

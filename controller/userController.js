@@ -3,6 +3,7 @@ const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
 const Job = require('../models/jobModel')
+const nodemailer =require('nodemailer')
 
 
 exports.userRegister= async (req,res)=>{
@@ -198,4 +199,33 @@ exports.searchJobByTitle =async(req,res)=>{
 
 }
 
+
+exports.forgotPassword = async(req,res) => {
+    try {
+        const { email, otpCode, newPassword } = req.body;
+
+        if (!email || !otpCode || !newPassword) {
+            return res.status(400).json({ message: 'Email, OTP code, and new password are required' });
+        }
+
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.otpCode !== otpCode || user.otpCodeExpires < Date.now()) {
+            return res.status(400).json({ message: 'Invalid or expired OTP code' });
+        }
+
+       if(password) user.password = newPassword; 
+        user.otpCode = undefined; 
+        user.otpCodeExpires = undefined; 
+        await user.save();
+
+        res.status(200).json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 
