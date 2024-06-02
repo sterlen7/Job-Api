@@ -21,8 +21,8 @@ const userProfileSchema = Joi.object({
             endDate: Joi.date().optional(),
         })
     ).required(),
-    skills: Joi.array().items(Joi.string()).required(),
-    // profilePicture: Joi.string().optional()
+    skills: Joi.array().items(Joi.string()).required()
+   
 });
 
 exports.validateUserProfile = (req, res, next) => {

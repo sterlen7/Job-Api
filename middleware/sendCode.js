@@ -2,6 +2,8 @@ const nodemailer = require('nodemailer');
 const User = require('../models/userModel');
 require('dotenv').config();
 
+
+
 function generateCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
@@ -54,3 +56,6 @@ exports.otp= async (req, res) => {
     }
   
 };
+
+
+

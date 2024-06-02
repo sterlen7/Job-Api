@@ -61,8 +61,7 @@ exports.userLogin= async(req,res)=>{
             return res.status(404).json({msg:"User does not exist , Sign Up!"})
         }
 
-        console.log('Input Password:', password);
-        console.log('Stored Password:', user.password);
+      
 
         const isPassword= await bcrypt.compare(password, user.password)
         
@@ -105,9 +104,10 @@ exports.deleteUserAccount = async(req,res)=>{
 }
 
 
+
 exports.createUserProfile = async (req, res) => {
     const userId = req.user.id;
-    const { name, email, bio, workExperience, education, skills } = req.body;
+    const {name, email, bio, workExperience, education, skills} = req.body;
 
     try {
         let profile = await UserProfile.findOne({ userId });
@@ -123,7 +123,7 @@ exports.createUserProfile = async (req, res) => {
             bio,
             workExperience,
             education,
-            skills
+            skills,
         });
 
         await profile.save();
@@ -134,6 +134,8 @@ exports.createUserProfile = async (req, res) => {
         res.status(500).json({ msg: 'Server error', error: err.message });
     }
 };
+
+
 
 exports.updateUserProfile = async (req, res) => {
     const userId = req.user.userId;
@@ -154,6 +156,7 @@ exports.updateUserProfile = async (req, res) => {
         if (workExperience) profile.workExperience = workExperience;
         if (education) profile.education = education;
         if (skills) profile.skills = skills;
+        if (req.file) profile.profileImage = req.file.path
 
         await profile.save();
 

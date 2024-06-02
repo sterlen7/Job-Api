@@ -13,7 +13,7 @@ const userProfileSchema = new mongoose.Schema({
     }],
     education: [{
         school: String,
-        degree: String,
+        degree: String, 
         fieldOfStudy: String,
         startDate: Date,
         endDate: Date,

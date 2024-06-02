@@ -5,6 +5,7 @@ const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
 const { otp } = require('../middleware/sendCode');
+const upload =require('../config/cloudinary')
 
 //User registration
 userRouter.post('/user/register',registerVal,userRegister)
