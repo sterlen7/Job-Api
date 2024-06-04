@@ -3,6 +3,7 @@ const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
 const Job = require('../models/jobModel')
+const JobApplication =require('../models/jobApply')
 
 
 
