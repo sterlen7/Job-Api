@@ -3,7 +3,7 @@ const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
 const Job = require('../models/jobModel')
-const JobApplication =require('../models/jobApply')
+
 
 
 
@@ -238,4 +238,5 @@ exports.forgotPassword = async(req,res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
 

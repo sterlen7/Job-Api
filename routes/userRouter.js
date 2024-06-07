@@ -1,11 +1,11 @@
 const express = require('express');
 const { registerVal } = require('../middleware/registerValidation');
-const { userRegister, userLogin,createUserProfile, updateUserProfile, deleteUserAccount, getAllJobs, searchJobByTitle,  forgotPassword } = require('../controller/userController');
+const { userRegister, userLogin,createUserProfile, updateUserProfile, deleteUserAccount, getAllJobs, searchJobByTitle,  forgotPassword, applyJob } = require('../controller/userController');
 const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
 const { otp } = require('../middleware/sendCode');
-const upload =require('../config/multerConfig');
+
 
 
 //User registration
@@ -35,10 +35,9 @@ userRouter.get('/jobs/search',searchJobByTitle)
  userRouter.post('/otp-request',otp)
 
 //job application 
+// userRouter.post('/job-apply',userAuth ,applyJob)
 
 
 module.exports = userRouter;
 
 
-
-// ,upload.single('cv')
