@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
     isAdmin:{type:Boolean,default:false},
     banned:{type:Boolean,default:false},
     otpCode: { type: String },
-    otpCodeExpires: { type: Date }
+    otpCodeExpires: { type: Date },
+    googleId :{type:String,require:true},
+    displayName:{type:String,require:true}
 },
 {
     timestamps: true

@@ -84,6 +84,7 @@ exports.userLogin= async(req,res)=>{
     }
 }
 
+
 exports.deleteUserAccount = async(req,res)=>{
     const userId = req.user.id
 

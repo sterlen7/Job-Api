@@ -7,14 +7,23 @@ require('dotenv').config()
 
 
 
+
 const PORT = process.env.PORT
 
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Database connected'))
 .catch((err)=>{console.log(err)})
 
+
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+
+
 
 app.use('/api', userRouter)
 app.use('/api',adminRouter)

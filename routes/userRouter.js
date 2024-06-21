@@ -8,11 +8,14 @@ const { otp } = require('../middleware/sendCode');
 
 
 
+
 //User registration
 userRouter.post('/user/register',registerVal,userRegister)
 
 //User Login
 userRouter.post('/user/login',userLogin)
+
+
 
 //User profile
 userRouter.post('/user/profile',userAuth,validateUserProfile,createUserProfile)
