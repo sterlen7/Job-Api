@@ -5,7 +5,7 @@ const userRouter = express.Router();
 const { userAuth } = require('../middleware/userAuthentication');
 const { validateUserProfile } = require('../middleware/userProfileValid');
 const { otp } = require('../middleware/sendCode');
-
+const upload =require('../config/cloudinaryConfig')
 
 
 
@@ -18,9 +18,9 @@ userRouter.post('/user/login',userLogin)
 
 
 //User profile
-userRouter.post('/user/profile',userAuth,validateUserProfile,createUserProfile)
+userRouter.post('/user/profile', userAuth, upload.single('profilePicture'), validateUserProfile, createUserProfile)
 
-userRouter.put('/user/profile', userAuth, updateUserProfile);
+userRouter.put('/user/profile', userAuth,upload.single('profilePicture'),updateUserProfile);
 
 //delete user
 

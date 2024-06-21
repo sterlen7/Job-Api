@@ -12,7 +12,7 @@ const userProfileSchema = Joi.object({
             endDate: Joi.date().optional(),
             description: Joi.string().optional()
         })
-    ).required(),
+    ),
     education: Joi.array().items(
         Joi.object({
             school: Joi.string().required(),
@@ -20,8 +20,8 @@ const userProfileSchema = Joi.object({
             startDate: Joi.date().required(),
             endDate: Joi.date().optional(),
         })
-    ).required(),
-    skills: Joi.array().items(Joi.string()).required()
+    ),
+    skills: Joi.array().items(Joi.string())
    
 });
 

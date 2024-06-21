@@ -3,6 +3,7 @@ const bcrypt =require('bcrypt')
 const Jwt= require('jsonwebtoken')
 const UserProfile =require('../models/userProfileModel')
 const Job = require('../models/jobModel')
+const upload = require('../config/cloudinaryConfig')
 
 
 
@@ -110,6 +111,8 @@ exports.deleteUserAccount = async(req,res)=>{
 exports.createUserProfile = async (req, res) => {
     const userId = req.user.id;
     const {name, email, bio, workExperience, education, skills} = req.body;
+    
+    console.log('Request Body:',req.body)
 
     try {
         let profile = await UserProfile.findOne({ userId });
@@ -118,6 +121,10 @@ exports.createUserProfile = async (req, res) => {
             return res.status(400).json({ msg: 'Profile already exists' });
         }
 
+        let profilePicture = null;
+        if (req.file) {
+            profilePicture = req.file.path; 
+        }
         profile = new UserProfile({
             userId,
             name,
@@ -126,8 +133,9 @@ exports.createUserProfile = async (req, res) => {
             workExperience,
             education,
             skills,
+            profilePicture
         });
-
+        
         await profile.save();
 
         return res.status(201).json({ msg: "User profile created successfully", profile });
@@ -158,7 +166,8 @@ exports.updateUserProfile = async (req, res) => {
         if (workExperience) profile.workExperience = workExperience;
         if (education) profile.education = education;
         if (skills) profile.skills = skills;
-        if (req.file) profile.profileImage = req.file.path
+        if (req.file)  profile.profilePicture = req.file.path;
+       
 
         await profile.save();
 

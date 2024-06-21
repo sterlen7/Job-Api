@@ -20,6 +20,7 @@ const userProfileSchema = new mongoose.Schema({
         description: String
     }],
     skills: [String],
+    profilePicture: { type: String },
     createdAt: {type: Date,default: Date.now},
     updatedAt: {type: Date,default: Date.now}
 });
